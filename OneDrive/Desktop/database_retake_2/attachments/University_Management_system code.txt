@@ -1,0 +1,120 @@
+CREATE DATABASE UnUSE UniversityManagementSystem;
+USE University_Management_System;
+
+//creating the student table
+
+CREATE TABLE STUDENT (
+    student_id INT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    phone VARCHAR(20),
+    enrol_date DATE NOT NULL
+);
+
+//creating the instructor table
+
+CREATE TABLE INSTRUCTOR (
+    instructor_id INT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    department VARCHAR(100) NOT NULL,
+    hire_date DATE NOT NULL
+);
+
+//creating the enrollment table
+
+CREATE TABLE ENROLLMENT (
+    enrollment_id INT PRIMARY KEY,
+    enrollment_date DATE NOT NULL,
+    student_id INT NOT NULL,
+    course_id INT NOT NULL
+);
+
+//Inserting data into instructor table
+
+INSERT INTO INSTRUCTOR VALUES
+(1001, 'Goeffery', 'Otieno', 'Computer Science', '2015-08-15'),
+(1002, 'Bernice', 'Njoki', 'Business Administration', '2018-01-10'),
+(1003, 'Michael', 'Oliech', 'Engineering', '2012-09-01'),
+(1004, 'Arnold', 'Nyasimi', 'Mathematics', '2020-08-20'),
+(1005, 'Deng', 'Major', 'Computer Science', '2016-03-15');
+
+//inserting data into student table
+
+INSERT INTO STUDENT VALUES
+(1, 'Alice', 'wairimu', 'alice@university.com', '555-0101', '2024-09-01'),
+(2, 'Brian', 'Mutiso', 'brian@university.com', '555-0102', '2024-09-01'),
+(3, 'Carla', 'Kimani', 'carla@university.com', '555-0103', '2024-09-01'),
+(4, 'David', 'Kipkoech', 'david@university.com', '555-0104', '2024-01-15'),
+(5, 'Emma', 'Wangari', 'emma@university.com', '555-0105', '2023-09-01'),
+(6, 'Frank', 'Kisilu', 'frank@university.com', '555-0106', '2024-09-01'),
+(7, 'Grace', 'Wangui', 'grace@university.com', '555-0107', '2023-09-01'),
+(8, 'Henry', 'Danger', 'henry@university.com', '555-0108', '2024-01-15'),
+(9, 'Ivy', 'Nyago', 'ivy@university.com', '555-0109', '2024-09-01'),
+(10, 'Jack', 'Njue', 'jack@university.com', '555-0110', '2023-09-01');
+
+//inserting data into course table
+
+INSERT INTO COURSE VALUES
+(201, 'Introduction to Programming', 'CS101', 1001),
+(202, 'Data Structures', 'CS201', 1001),
+(203, 'Database Systems', 'CS301', 1005),
+(204, 'Principles of Management', 'BUS101', 1002),
+(205, 'Marketing Fundamentals', 'BUS201', 1002),
+(206, 'Statics', 'ENG101', 1003),
+(207, 'Calculus I', 'MATH101', 1004),
+(208, 'Linear Algebra', 'MATH201', 1004);
+
+//inserting data into enrollment table
+
+INSERT INTO ENROLLMENT VALUES
+(1, '2024-09-05', 1, 201),
+(2, '2024-09-05', 1, 202),
+(3, '2024-09-05', 1, 203),
+(4, '2024-09-05', 2, 204),
+(5, '2024-09-05', 2, 205),
+(6, '2024-09-05', 3, 201),
+(7, '2024-09-05', 3, 203),
+(8, '2024-09-05', 4, 206),
+(9, '2024-09-05', 5, 207),
+(10, '2024-09-05', 5, 208),
+(11, '2024-09-05', 6, 201),
+(12, '2024-09-05', 6, 202),
+(13, '2024-09-05', 7, 204),
+(14, '2024-09-05', 8, 206),
+(15, '2024-09-05', 9, 207),
+(16, '2024-09-05', 9, 208),
+(17, '2024-09-05', 10, 201),
+(18, '2024-09-05', 10, 202),
+(19, '2024-09-05', 10, 203),
+(20, '2024-09-05', 3, 202);
+
+// JOIN QUERY: Joining students with their courses
+
+SELECT s.first_name, s.last_name, c.course_name, c.course_no, e.enrollment_date
+FROM ENROLLMENT e
+JOIN STUDENT s ON e.student_id = s.student_id
+JOIN COURSE c ON e.course_id = c.course_id
+ORDER BY s.last_name;
+
+//COUNT QUERY: counting students in each course
+
+SELECT c.course_name, COUNT(e.student_id) AS enrolled_students
+FROM COURSE c
+LEFT JOIN ENROLLMENT e ON c.course_id = e.course_id
+GROUP BY c.course_id
+ORDER BY enrolled_students DESC;
+
+//JOIN QUERY: finding courses taught by COMPUTER SCIENCE instructor
+
+SELECT c.course_name, c.course_no, i.first_name, i.last_name
+FROM COURSE c
+JOIN INSTRUCTOR i ON c.instructor_id = i.instructor_id
+WHERE i.department = 'Computer Science';
+
+//inserting a new student
+INSERT INTO STUDENT VALUES (11, 'Kevin', 'Cheriyot', 'kevin@university.com', '555-0111', '2025-01-15');
+
+//Deleting an enrollment
+DELETE FROM ENROLLMENT WHERE student_id = 6 AND course_id = 201;
